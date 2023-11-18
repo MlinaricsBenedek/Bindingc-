@@ -1,28 +1,31 @@
-#include <iostream>
+#include "GameEngine.hpp"
+GEngine* eng = nullptr;
 
-constexpr int N_ELEMENTS = 100;
 
-int main()
+int main(int arcj, char* kr[])
 {
-    //komment
-    int *b = new int[N_ELEMENTS];//hibás hivatkozas
-    
-    std::cout << "1-100 ertekek duplazasa";//rossz szintaktika stringnél:"", hiányzó:;
-    for (int i = 0;i<N_ELEMENTS;i++)//hiányos ciklusfej
-    {
-        b[i] = i * 2;
-    }
-    for (int i = 0; i<N_ELEMENTS; i++)//hiányzó feltétel
-    {
-        std::cout << "\n Ertek:"<<b[i];//hianyzó paraméter
-    }    
-    std::cout << "Atlag szamitasa: " << std::endl;
-    int atlag=0;//hiányzó értékadés
-    for (int i = 0; i < N_ELEMENTS; i++)//rossz szintaktika csere ,->;
-    {
-        atlag += b[i];
-    }
-    atlag /= N_ELEMENTS;
-    std::cout << "Atlag: " << atlag << std::endl;
-    return 0;
+	const int FPS = 60;
+	const int gametimeDELAY = 1000 / FPS;
+
+
+	Uint32 gamestart;
+	int gametime;
+
+	eng = new GEngine;
+	eng->initialize("title",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,1000,800,false);
+	while (eng->GameIsRunning())
+	{
+		
+		gamestart = SDL_GetTicks();
+		eng->handleEv();
+		eng->update();
+		eng->render();
+		gametime = SDL_GetTicks() - gamestart;
+		if (gametimeDELAY > gametime)
+		{
+			SDL_Delay(gametimeDELAY-gametime);
+		}
+	}
+	eng->clean();
+	return 0;
 }
